@@ -1568,11 +1568,10 @@ class PatchEmbed(nn.Module):
         super().__init__()
         img_size = to_2tuple(img_size)
         patch_size = to_2tuple(patch_size)
-        patches_resolution = [img_size[0] // patch_size[0], img_size[1] // patch_size[1]]
         self.img_size = img_size
         self.patch_size = patch_size
-        self.patches_resolution = patches_resolution
-        self.num_patches = patches_resolution[0] * patches_resolution[1]
+        self.patches_resolution = (img_size[0] // patch_size[0], img_size[1] // patch_size[1])
+        self.num_patches = self.patches_resolution[0] * self.patches_resolution[1]
 
         self.in_chans = in_chans
         self.embed_dim = embed_dim
@@ -1600,7 +1599,6 @@ class PatchEmbed(nn.Module):
             flops += Ho * Wo * self.embed_dim
         return flops
 
-from timm.models.vision_transformer import _cfg, PatchEmbed
 class SwinTransformer(nn.Module):
     r""" Swin Transformer
         A PyTorch impl of : `Swin Transformer: Hierarchical Vision Transformer using Shifted Windows`  -
