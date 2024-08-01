@@ -29,7 +29,7 @@ class RAM(nn.Module):
                  threshold=0.68,
                  delete_tag_index=[],
                  tag_list=f'{CONFIG_PATH}/data/ram_tag_list.txt',
-                 tag_list_chinese=f'{CONFIG_PATH}/data/ram_tag_list_chinese.txt',
+                #  tag_list_chinese=f'{CONFIG_PATH}/data/ram_tag_list_chinese.txt',
                  stage='eval'):
         r""" The Recognize Anything Model (RAM) inference module.
         RAM is a strong image tagging model, which can recognize any common category with high accuracy.
@@ -153,7 +153,7 @@ class RAM(nn.Module):
 
         # load tag list
         self.tag_list = self.load_tag_list(tag_list)
-        self.tag_list_chinese = self.load_tag_list(tag_list_chinese)
+        # self.tag_list_chinese = self.load_tag_list(tag_list_chinese)
 
         # create image-tag recognition decoder
         self.threshold = threshold
@@ -344,11 +344,11 @@ class RAM(nn.Module):
             index = np.argwhere(tag[b] == 1)
             token = self.tag_list[index].squeeze(axis=1)
             tag_output.append(' | '.join(token))
-            token_chinese = self.tag_list_chinese[index].squeeze(axis=1)
-            tag_output_chinese.append(' | '.join(token_chinese))
+            # token_chinese = self.tag_list_chinese[index].squeeze(axis=1)
+            # tag_output_chinese.append(' | '.join(token_chinese))
 
 
-        return tag_output, tag_output_chinese
+        return tag_output, None
 
     def generate_tag_openset(self,
                  image,
