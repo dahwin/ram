@@ -3,9 +3,10 @@ import os
 import sys
 
 __dir__ = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(__dir__)
-sys.path.insert(0, os.path.abspath(os.path.join(__dir__,  "./")))
-print(os.path.abspath(os.path.join(__dir__,  "./")))
+# sys.path.append(__dir__)
+# sys.path.insert(0, os.path.abspath(os.path.join(__dir__,  "./")))
+pathh = os.path.abspath(os.path.join(__dir__,  "./"))
+print(pathh)
 import json
 import warnings
 
@@ -2103,9 +2104,9 @@ def load_checkpoint(model, url_or_filename):
 
 def load_checkpoint_swinbase(model, url_or_filename, kwargs):
     if kwargs['image_size'] == 224:
-        vision_config_path = f'config_swinB_224.json'
+        vision_config_path = f'{pathh}/config_swinB_224.json'
     elif kwargs['image_size'] == 384:
-        vision_config_path = f'configs/swin/config_swinB_384.json'
+        vision_config_path = f'{pathh}/swin/config_swinB_384.json'
     window_size = read_json(vision_config_path)['window_size']
     print('--------------')
     print(url_or_filename)
@@ -2141,9 +2142,9 @@ def load_checkpoint_swinbase(model, url_or_filename, kwargs):
 
 def load_checkpoint_swinlarge(model, url_or_filename, kwargs):
     if kwargs['image_size'] == 224:
-        vision_config_path = f'config_swinL_224.json'
+        vision_config_path = f'{pathh}/config_swinL_224.json'
     elif kwargs['image_size'] == 384:
-        vision_config_path = f'config_swinL_384.json'
+        vision_config_path = f'{pathh}/config_swinL_384.json'
     window_size = read_json(vision_config_path)['window_size']
     print('--------------')
     print(url_or_filename)
@@ -2272,7 +2273,7 @@ warnings.filterwarnings("ignore")
 
 class RAM(nn.Module):
     def __init__(self,
-                 med_config=f'med_config.json',
+                 med_config=f'{pathh}/med_config.json',
                  image_size=384,
                  text_encoder_type='bert-base-uncased',
                  vit='base',
@@ -2281,7 +2282,7 @@ class RAM(nn.Module):
                  prompt='a picture of ',
                  threshold=0.68,
                  delete_tag_index=[],
-                 tag_list=f'{CONFIG_PATH}/ram_tag_list.txt',
+                 tag_list=f'{pathh}/ram_tag_list.txt',
                 #  tag_list_chinese=f'{CONFIG_PATH}/data/ram_tag_list_chinese.txt',
                  stage='eval'):
         r""" The Recognize Anything Model (RAM) inference module.
@@ -2300,9 +2301,9 @@ class RAM(nn.Module):
         # create image encoder
         if vit == 'swin_b':
             if image_size == 224:
-                vision_config_path = f'config_swinB_224.json'
+                vision_config_path = f'{pathh}/config_swinB_224.json'
             elif image_size == 384:
-                vision_config_path = f'config_swinB_384.json'
+                vision_config_path = f'{pathh}/config_swinB_384.json'
             vision_config = read_json(vision_config_path)
             assert image_size == vision_config['image_res']
             # assert config['patch_size'] == 32
@@ -2342,9 +2343,9 @@ class RAM(nn.Module):
 
         elif vit == 'swin_l':
             if image_size == 224:
-                vision_config_path = f'config_swinL_224.json'
+                vision_config_path = f'{pathh}/config_swinL_224.json'
             elif image_size == 384:
-                vision_config_path = f'config_swinL_384.json'
+                vision_config_path = f'{pathh}/config_swinL_384.json'
             vision_config = read_json(vision_config_path)
             assert image_size == vision_config['image_res']
             # assert config['patch_size'] == 32
@@ -2411,7 +2412,7 @@ class RAM(nn.Module):
         # create image-tag recognition decoder
         self.threshold = threshold
         self.num_class = len(self.tag_list)
-        q2l_config = BertConfig.from_json_file(f'q2l_config.json')
+        q2l_config = BertConfig.from_json_file(f'{pathh}/q2l_config.json')
         q2l_config.encoder_width = 512
         self.tagging_head = BertModel(config=q2l_config,
                                       add_pooling_layer=False)
@@ -2444,7 +2445,7 @@ class RAM(nn.Module):
 
         # adjust thresholds for some tags
         self.class_threshold = torch.ones(self.num_class) * self.threshold
-        ram_class_threshold_path = f'{CONFIG_PATH}/ram_tag_list_threshold.txt'
+        ram_class_threshold_path = f'{pathram_tag_list_threshold.txt'
         with open(ram_class_threshold_path, 'r', encoding='utf-8') as f:
             ram_class_threshold = [float(s.strip()) for s in f]
         for key,value in enumerate(ram_class_threshold):
