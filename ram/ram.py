@@ -2445,7 +2445,7 @@ class RAM(nn.Module):
 
         # adjust thresholds for some tags
         self.class_threshold = torch.ones(self.num_class) * self.threshold
-        ram_class_threshold_path = f'{pathram_tag_list_threshold.txt'
+        ram_class_threshold_path = 
         with open(ram_class_threshold_path, 'r', encoding='utf-8') as f:
             ram_class_threshold = [float(s.strip()) for s in f]
         for key,value in enumerate(ram_class_threshold):
