@@ -2287,7 +2287,7 @@ class RAM(nn.Module):
                  prompt='a picture of ',
                  threshold=0.68,
                  delete_tag_index=[],
-                 tag_list=f'{CONFIG_PATH}/data/ram_tag_list.txt',
+                 tag_list=f'{CONFIG_PATH}/ram_tag_list.txt',
                 #  tag_list_chinese=f'{CONFIG_PATH}/data/ram_tag_list_chinese.txt',
                  stage='eval'):
         r""" The Recognize Anything Model (RAM) inference module.
