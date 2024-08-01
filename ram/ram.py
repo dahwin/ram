@@ -5,7 +5,8 @@ import sys
 __dir__ = os.path.dirname(os.path.abspath(__file__))
 # sys.path.append(__dir__)
 # sys.path.insert(0, os.path.abspath(os.path.join(__dir__,  "./")))
-pathh = os.path.abspath(os.path.join(__dir__,  "./"))
+pa = os.path.abspath(os.path.join(__dir__,  "./"))
+pathh = f"{pa}/conf"
 print(pathh)
 import json
 import warnings
