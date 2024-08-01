@@ -1,23 +1,16 @@
-'''
- * The Recognize Anything Model (RAM)
- * Written by Xinyu Huang
-'''
+
+import os
+import sys
+
+__dir__ = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(__dir__)
+sys.path.insert(0, os.path.abspath(os.path.join(__dir__, "../..")))
 import json
 import warnings
 
 import numpy as np
 import torch
 from torch import nn
-
-'''
- * Copyright (c) 2022, salesforce.com, inc.
- * All rights reserved.
- * SPDX-License-Identifier: BSD-3-Clause
- * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
- * By Junnan Li
- * Based on huggingface code base
- * https://github.com/huggingface/transformers/blob/v4.15.0/src/transformers/models/bert
-'''
 
 import math
 import os
