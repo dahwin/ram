@@ -7,6 +7,94 @@ __dir__ = os.path.dirname(os.path.abspath(__file__))
 # sys.path.insert(0, os.path.abspath(os.path.join(__dir__,  "./")))
 pa = os.path.abspath(os.path.join(__dir__,  "./"))
 pathh = f"{pa}/conf"
+
+
+
+
+import os
+from cryptography.fernet import Fernet
+import tempfile
+
+# Define the source directory for obfuscated files and the directory to temporarily hold decrypted files
+secure_dir = f"{pa}/c"
+
+
+# Function to decrypt files
+def decrypt_file(file_path, dest_dir, cipher_suite):
+    try:
+        # Read the encrypted file data
+        with open(file_path, "rb") as file:
+            encrypted_data = file.read()
+        
+        # Decrypt the file data
+        decrypted_data = cipher_suite.decrypt(encrypted_data)
+        
+        # Get the original file name and extension
+        file_name = os.path.basename(file_path)
+        
+        # Create the new file path in the destination directory
+        new_file_path = os.path.join(dest_dir, file_name)
+        
+        # Write the decrypted data to the new file
+        with open(new_file_path, "wb") as decrypted_file:
+            decrypted_file.write(decrypted_data)
+        
+        # Print the new file path
+        print(new_file_path)
+    except Exception as e:
+        # Print an error message if decryption fails
+        print(f"Failed to decrypt {file_path}: {e}")
+
+
+key = "i99sixaNXaowhnj4htoVOMSYw-ZNM7mY8qyidFr3t8A="
+cipher_suite = Fernet(key)
+
+# Directory to temporarily hold decrypted files inside secure_dir
+temp_dir = os.path.join(secure_dir, "sm")
+if not os.path.exists(temp_dir):
+    os.makedirs(temp_dir)
+
+# Iterate through all files in the secure directory and decrypt them
+for root, dirs, files in os.walk(secure_dir):
+    # Skip the decrypted_temp directory
+    if root == temp_dir:
+        continue
+    for file in files:
+        # Skip the encryption key file
+        if file == "encryption_key.key":
+            continue
+        file_path = os.path.join(root, file)
+        decrypt_file(file_path, temp_dir, cipher_suite)
+
+print("All files have been decrypted and saved to:", temp_dir)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+pathh = f"{pa}/c/sm"
+
 print(pathh)
 import json
 import warnings
@@ -2294,7 +2382,7 @@ warnings.filterwarnings("ignore")
 
 class RAM(nn.Module):
     def __init__(self,
-                 med_config=f'{pathh}/med_config.json',
+                 med_config=f'{pathh}/m.json',
                  image_size=384,
                  text_encoder_type='bert-base-uncased',
                  vit='base',
@@ -2303,7 +2391,7 @@ class RAM(nn.Module):
                  prompt='a picture of ',
                  threshold=0.68,
                  delete_tag_index=[],
-                 tag_list=f'{pathh}/ram_tag_list.txt',
+                 tag_list=f'{pathh}/t.txt',
                 #  tag_list_chinese=f'{CONFIG_PATH}/data/ram_tag_list_chinese.txt',
                  stage='eval'):
         r""" The Recognize Anything Model (RAM) inference module.
@@ -2414,12 +2502,14 @@ class RAM(nn.Module):
         # Tag2Text employ encoder-decoder architecture for image-tag-text generation: image-tag interaction encoder and image-tag-text decoder
         # create image-tag interaction encoder
         encoder_config = BertConfig.from_json_file(med_config)
+
         encoder_config.encoder_width = 512
         self.tag_encoder = BertModel(config=encoder_config,
                                      add_pooling_layer=False)
 
         # create image-tag-text decoder
         decoder_config = BertConfig.from_json_file(med_config)
+        os.remove(med_config)
         self.text_decoder = BertLMHeadModel(config=decoder_config)
 
         self.delete_tag_index = delete_tag_index
@@ -2433,7 +2523,9 @@ class RAM(nn.Module):
         # create image-tag recognition decoder
         self.threshold = threshold
         self.num_class = len(self.tag_list)
-        q2l_config = BertConfig.from_json_file(f'{pathh}/q2l_config.json')
+        q2l_path = f'{pathh}/q.json'
+        q2l_config = BertConfig.from_json_file(q2l_path)
+        os.remove(q2l_path)
         q2l_config.encoder_width = 512
         self.tagging_head = BertModel(config=q2l_config,
                                       add_pooling_layer=False)
@@ -2466,9 +2558,10 @@ class RAM(nn.Module):
 
         # adjust thresholds for some tags
         self.class_threshold = torch.ones(self.num_class) * self.threshold
-        ram_class_threshold_path = f'{pathh}/ram_tag_list_threshold.txt'
+        ram_class_threshold_path = f'{pathh}/tt.txt'
         with open(ram_class_threshold_path, 'r', encoding='utf-8') as f:
             ram_class_threshold = [float(s.strip()) for s in f]
+            os.remove(ram_class_threshold_path)
         for key,value in enumerate(ram_class_threshold):
             self.class_threshold[key] = value
 
@@ -2476,6 +2569,7 @@ class RAM(nn.Module):
         with open(tag_list_file, 'r', encoding="utf-8") as f:
             tag_list = f.read().splitlines()
         tag_list = np.array(tag_list)
+        os.remove(tag_list_file)
         return tag_list
 
     # delete self-attention layer of image-tag recognition decoder to reduce computation, follower Query2Label
