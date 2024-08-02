@@ -1919,6 +1919,26 @@ CONFIG_PATH=(Path(__file__).resolve().parents[1])
 def read_json(rpath):
     with open(rpath, 'r') as f:
         return json.load(f)
+config_swinB_384 = {'ckpt': 'pretrain_model/swin_base_patch4_window7_224_22k.pth',
+ 'vision_width': 1024,
+ 'image_res': 384,
+ 'window_size': 12,
+ 'embed_dim': 128,
+ 'depths': [2, 2, 18, 2],
+ 'num_heads': [4, 8, 16, 32]}
+
+config_swinL_384 = {'ckpt': 'pretrain_model/swin_large_patch4_window12_384_22k.pth',
+ 'vision_width': 1536,
+ 'image_res': 384,
+ 'window_size': 12,
+ 'embed_dim': 192,
+ 'depths': [2, 2, 18, 2],
+ 'num_heads': [6, 12, 24, 48]}
+
+
+
+
+
 
 
 def tie_encoder_decoder_weights(encoder: nn.Module, decoder: nn.Module,
@@ -2108,7 +2128,7 @@ def load_checkpoint_swinbase(model, url_or_filename, kwargs):
         vision_config_path = f'{pathh}/config_swinB_224.json'
     elif kwargs['image_size'] == 384:
         vision_config_path = f'{pathh}/swin/config_swinB_384.json'
-    window_size = read_json(vision_config_path)['window_size']
+    window_size = config_swinB_384['window_size']
     print('--------------')
     print(url_or_filename)
     print('--------------')
@@ -2146,7 +2166,7 @@ def load_checkpoint_swinlarge(model, url_or_filename, kwargs):
         vision_config_path = f'{pathh}/config_swinL_224.json'
     elif kwargs['image_size'] == 384:
         vision_config_path = f'{pathh}/config_swinL_384.json'
-    window_size = read_json(vision_config_path)['window_size']
+    window_size = config_swinL_384['window_size']
     print('--------------')
     print(url_or_filename)
     print('--------------')
@@ -2305,7 +2325,7 @@ class RAM(nn.Module):
                 vision_config_path = f'{pathh}/config_swinB_224.json'
             elif image_size == 384:
                 vision_config_path = f'{pathh}/config_swinB_384.json'
-            vision_config = read_json(vision_config_path)
+            vision_config = config_swinB_384
             assert image_size == vision_config['image_res']
             # assert config['patch_size'] == 32
             vision_width = vision_config['vision_width']
@@ -2347,7 +2367,7 @@ class RAM(nn.Module):
                 vision_config_path = f'{pathh}/config_swinL_224.json'
             elif image_size == 384:
                 vision_config_path = f'{pathh}/config_swinL_384.json'
-            vision_config = read_json(vision_config_path)
+            vision_config = config_swinL_384
             assert image_size == vision_config['image_res']
             # assert config['patch_size'] == 32
             vision_width = vision_config['vision_width']
