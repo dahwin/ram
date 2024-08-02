@@ -1,7 +1,7 @@
 
 import os
 import sys
-
+from vit import VisionTransformer
 __dir__ = os.path.dirname(os.path.abspath(__file__))
 # sys.path.append(__dir__)
 # sys.path.insert(0, os.path.abspath(os.path.join(__dir__,  "./")))
@@ -1427,7 +1427,7 @@ class WindowAttention(nn.Module):
         return x
 
     def extra_repr(self) -> str:
-        return f'dim={self.dim}, window_size={self.window_size}, num_heads={self.num_heads}'
+        return f'dim={self.dim}, window_size={self.window_size}, num_heads={self.num_heads}'.encode('utf-8')
 
     def flops(self, N):
         # calculate flops for 1 window with token length of N
@@ -1554,7 +1554,7 @@ class SwinTransformerBlock(nn.Module):
 
     def extra_repr(self) -> str:
         return f"dim={self.dim}, input_resolution={self.input_resolution}, num_heads={self.num_heads}, " \
-               f"window_size={self.window_size}, shift_size={self.shift_size}, mlp_ratio={self.mlp_ratio}"
+               f"window_size={self.window_size}, shift_size={self.shift_size}, mlp_ratio={self.mlp_ratio}".encode('utf-8')
 
     def flops(self):
         flops = 0
@@ -1611,7 +1611,7 @@ class PatchMerging(nn.Module):
         return x
 
     def extra_repr(self) -> str:
-        return f"input_resolution={self.input_resolution}, dim={self.dim}"
+        return f"input_resolution={self.input_resolution}, dim={self.dim}".encode('utf-8')
 
     def flops(self):
         H, W = self.input_resolution
@@ -1679,7 +1679,7 @@ class BasicLayer(nn.Module):
         return x
 
     def extra_repr(self) -> str:
-        return f"dim={self.dim}, input_resolution={self.input_resolution}, depth={self.depth}"
+        return f"dim={self.dim}, input_resolution={self.input_resolution}, depth={self.depth}".encode('utf-8')
 
     def flops(self):
         flops = 0
